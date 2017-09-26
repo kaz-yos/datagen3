@@ -58,12 +58,6 @@ generate_covariates <- function(df, prob) {
         rename_all(function(x) {gsub("Z","X",x)})
 }
 
-if (FALSE) {
-    generate_latent_covariates(100, 7, rho = 0.7) %>%
-        generate_covariates(prob = c(0.01, rep(0.2,5), 0.01)) %>%
-        summary
-}
-
 
 ##' Generate a binary treatment
 ##'
@@ -75,7 +69,7 @@ if (FALSE) {
 ##' @return df with treatment (A) added.
 ##'
 ##' @author Kazuki Yoshida
-generate_treatment <- function(df, alphas) {
+generate_bin_treatment <- function(df, alphas) {
 
     ## X matrix
     Xs <- as.matrix(df)

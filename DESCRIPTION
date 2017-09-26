@@ -6,7 +6,8 @@ Description: What the package does (one paragraph).
 Depends: R (>= 3.4.1)
 Imports:
     MASS,
-    tidyverse
+    tidyverse,
+    locfit
 Suggests:
     testthat
 License: What license is it under?
