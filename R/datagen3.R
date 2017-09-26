@@ -157,7 +157,8 @@ pA_mat_to_A_mat <- function(pA_mat) {
                     function(pA_vec) {
                         rmultinom(n = 1, size = 1, prob = pA_vec)
                     }) %>%
-        do.call(rbind, .)
+        do.call(cbind, .) %>%
+        t
 
     A_mat
 }
