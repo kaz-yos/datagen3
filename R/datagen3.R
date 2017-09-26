@@ -175,12 +175,17 @@ A_indicator_mat_to_multinom_A_vec <- function(A_mat) {
 ##' .. content for \details{} ..
 ##'
 ##' @param df data_frame containing X_i and A_i
-##' @param betas coefficients for the outcome model
+##' @param beta0 Intercept coefficient
+##' @param betaA1 Coefficient for I(A_i = 1)
+##' @param betaA2 Coefficient for I(A_i = 2)
+##' @param betaX Coefficient vector for covariates X_i
+##' @param betaXA1 Interaction coefficients for covariates when A_i = 1
+##' @param betaXA2 Interaction coefficients for covariates when A_i = 2
 ##'
 ##' @return data_frame with binary Y added
 ##'
 ##' @author Kazuki Yoshida
-generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaX, betaA1, betaA2, betaXA1, betaXA2) {
+generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, betaX, betaXA1, betaXA2) {
 
     colnames_starting_with_X <- Filter(f = function(elt) {grepl("^X", elt)}, x = names(df))
 
