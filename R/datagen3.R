@@ -168,3 +168,53 @@ A_indicator_mat_to_multinom_A_vec <- function(A_mat) {
     ## A_mat is a n x 3 matrix of treatment indicators.
     as.numeric(A_mat %*% matrix(c(0,1,2)))
 }
+
+
+##' Generate binary outcome given X_i and A_i
+##'
+##' .. content for \details{} ..
+##'
+##' @param df data_frame containing X_i and A_i
+##' @param betas coefficients for the outcome model
+##'
+##' @return data_frame with binary Y added
+##'
+##' @author Kazuki Yoshida
+generate_bin_outcome_log_tri_A <- function(df, beta0, betaX, betaA1, betaA2, betaXA1, betaXA2) {
+
+    colnames_starting_with_X <- Filter(f = function(elt) {grepl("^X", elt)}, x = names(df))
+
+    assertthat::assert_that(length(beta0) == 1)
+    assertthat::assert_that(length(betaX) == length(colnames_starting_with_X))
+    assertthat::assert_that(length(betaA1) == 1)
+    assertthat::assert_that(length(betaA2) == 1)
+    assertthat::assert_that(length(betaXA1) == length(betaX))
+    assertthat::assert_that(length(betaXA2) == length(betaX))
+
+    ## Extract X part as a matrix
+    Xs <- as.matrix(df[,colnames_starting_with_X])
+
+    ## Construct treatment indicators from A in {0,1,2}
+    A1 <- (df$A == 1)
+    A2 <- (df$A == 2)
+
+    ## Linear predictor matrix (n x 1)
+    lpY <- beta0 + (betaA1 * A1) + (betaA2 * A2) +
+        Xs %*% matrix(betaX) +
+        Xs %*% matrix(betaXA1) * A1 +
+        Xs %*% matrix(betaXA2) * A2
+
+    assertthat::assert_that(nrow(lpY) == nrow(df))
+    assertthat::assert_that(ncol(lpY) == 1)
+
+    ## Tentative probability of binary outcome Y
+    pY <- exp(as.numeric(lpY))
+
+    ## Truncate at 1 to avoid a probability beyond 1.
+    pY[pY > 1] <- 1
+
+    ## Bernoulli(p_i)
+    df$Y <- rbinom(n = length(pY), size = 1, prob = pY)
+
+    df
+}
