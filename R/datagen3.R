@@ -14,21 +14,17 @@
 ##' @return a data_frame of Z_i latent covariates
 ##'
 ##' @author Kazuki Yoshida
-generate_latent_covariates <- function(n, p, rho) {
+generate_mvn_covariates <- function(n, mu, Sigma) {
 
-    ## Mean vector
-    mu <- rep(0, p)
-
-    ## Correlation matrix
-    Sigma <- diag(rep(1, p))
-    Sigma[1,2] <- rho
-    Sigma[2,1] <- rho
-    Sigma[p,p-1] <- rho
-    Sigma[p-1,p] <- rho
+    assertthat::assert_that(length(n) == 1)
+    assertthat::assert_that(is.numeric(n))
+    assertthat::assert_that(is.numeric(mu))
+    assertthat::assert_that(ncol(mu) == length(mu))
+    assertthat::assert_that(nrow(mu) == length(mu))
 
     out <- MASS::mvrnorm(n = n,
-                  mu = mu,
-                  Sigma = Sigma) %>%
+                         mu = mu,
+                         Sigma = Sigma) %>%
         as_data_frame
 
     names(out) <- gsub("V", "Z", names(out))
