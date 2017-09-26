@@ -180,7 +180,7 @@ A_indicator_mat_to_multinom_A_vec <- function(A_mat) {
 ##' @return data_frame with binary Y added
 ##'
 ##' @author Kazuki Yoshida
-generate_bin_outcome_log_tri_A <- function(df, beta0, betaX, betaA1, betaA2, betaXA1, betaXA2) {
+generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaX, betaA1, betaA2, betaXA1, betaXA2) {
 
     colnames_starting_with_X <- Filter(f = function(elt) {grepl("^X", elt)}, x = names(df))
 
@@ -232,7 +232,7 @@ generate_bin_outcome_log_tri_A <- function(df, beta0, betaX, betaA1, betaA2, bet
 ##' @return data_frame with binary Y added
 ##'
 ##' @author Kazuki Yoshida
-generate_bin_outcome_log_tri_A <- function(df, beta0, betaX, betaA1, betaXA1) {
+generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, betaXA1) {
 
     colnames_starting_with_X <- Filter(f = function(elt) {grepl("^X", elt)}, x = names(df))
 
