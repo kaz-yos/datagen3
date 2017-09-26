@@ -3,15 +3,15 @@
 ################################################################################
 
 
-##' Generate latent covariates Z_i
+##' Generate MVN covariates Z_i
 ##'
 ##' .. content for \details{} ..
 ##'
 ##' @param n Sample size
-##' @param p Number of covariates
-##' @param rho correlation coefficients for the first and last covariates
+##' @param mu Mean vector
+##' @param Sigma Positive definite variance-covariance matrix
 ##'
-##' @return a data_frame of Z_i latent covariates
+##' @return a data_frame of Z_i MVN covariates
 ##'
 ##' @author Kazuki Yoshida
 generate_mvn_covariates <- function(n, mu, Sigma) {
@@ -22,10 +22,11 @@ generate_mvn_covariates <- function(n, mu, Sigma) {
     assertthat::assert_that(ncol(mu) == length(mu))
     assertthat::assert_that(nrow(mu) == length(mu))
 
-    out <- MASS::mvrnorm(n = n,
-                         mu = mu,
-                         Sigma = Sigma) %>%
-        as_data_frame
+    out <- tibble::as_data_frame(
+                       MASS::mvrnorm(n = n,
+                                     mu = mu,
+                                     Sigma = Sigma)
+                   )
 
     names(out) <- gsub("V", "Z", names(out))
 
