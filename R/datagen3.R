@@ -116,21 +116,21 @@ generate_tri_treatment <- function(df, alphas1, alphas2) {
     Xs <- cbind(rep(1, nrow(Xs)), Xs)
 
     ## Linear predictors
-    lp1 <- as.numeric(Xs %*% alphas1)
-    lp2 <- as.numeric(Xs %*% alphas2)
+    lpA1 <- as.numeric(Xs %*% alphas1)
+    lpA2 <- as.numeric(Xs %*% alphas2)
 
     ## P[A=1|X]/P[A=0|X]
-    exp_lp1 <- exp(lp1)
+    exp_lpA1 <- exp(lpA1)
     ## P[A=2|X]/P[A=0|X]
-    exp_lp2 <- exp(lp2)
+    exp_lpA2 <- exp(lpA2)
 
     ## Common denominator
-    denom <- 1 + exp_lp1 + exp_lp2
+    denom <- 1 + exp_lpA1 + exp_lpA2
 
     ## True propensity scores
     pA0 <- 1       / denom
-    pA1 <- exp_lp1 / denom
-    pA2 <- exp_lp2 / denom
+    pA1 <- exp_lpA1 / denom
+    pA2 <- exp_lpA2 / denom
 
     ## n x 3 matrix of true propensity scores
     pA_mat <- cbind(pA0, pA1, pA2)
