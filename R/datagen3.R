@@ -139,7 +139,7 @@ generate_tri_treatment <- function(df, alphas1, alphas2) {
     A_mat <- pA_mat_to_A_mat(pA_mat)
 
     ## Generate three-valued vector
-    df$A <- A_indicator_to_multinom_A(A_mat)
+    df$A <- A_indicator_mat_to_multinom_A_vec(A_mat)
 
     ## Return the augmented data_frame
     df
@@ -148,7 +148,7 @@ generate_tri_treatment <- function(df, alphas1, alphas2) {
 pA_mat_to_A_mat <- function(pA_mat) {
 
     ## pA_mat is a n x 3 matrix of probability vectors (rows).
-    
+
     ## transposed 3 x n data_frame
     pA_tr_df <- tibble::as_data_frame(t(pA_mat))
 
@@ -162,3 +162,8 @@ pA_mat_to_A_mat <- function(pA_mat) {
     A_mat
 }
 
+A_indicator_mat_to_multinom_A_vec <- function(A_mat) {
+
+    ## A_mat is a n x 3 matrix of treatment indicators.
+    as.numeric(A_mat %*% matrix(c(0,1,2)))
+}
