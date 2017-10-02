@@ -19,8 +19,8 @@ generate_mvn_covariates <- function(n, mu, Sigma) {
     assertthat::assert_that(length(n) == 1)
     assertthat::assert_that(is.numeric(n))
     assertthat::assert_that(is.numeric(mu))
-    assertthat::assert_that(ncol(mu) == length(mu))
-    assertthat::assert_that(nrow(mu) == length(mu))
+    assertthat::assert_that(ncol(Sigma) == length(mu))
+    assertthat::assert_that(nrow(Sigma) == length(mu))
 
     out <- tibble::as_data_frame(
                        MASS::mvrnorm(n = n,
@@ -106,8 +106,8 @@ generate_bin_treatment <- function(df, alphas) {
 ##' @author Kazuki Yoshida
 generate_tri_treatment <- function(df, alphas1, alphas2) {
 
-    assertthat::assert_that(ncol == (length(alphas1) - 1))
-    assertthat::assert_that(ncol == (length(alphas2) - 1))
+    assertthat::assert_that(ncol(df) == (length(alphas1) - 1))
+    assertthat::assert_that(ncol(df) == (length(alphas2) - 1))
 
     ## X matrix
     Xs <- as.matrix(df)
