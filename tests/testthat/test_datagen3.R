@@ -29,3 +29,20 @@ test_that("rmultinom works", {
     expect_equal(A[-4],c(0,1,2))
 
 })
+
+
+test_that("Data generation steps work for three groups", {
+
+    Sigma <- matrix(c(1, 0.7,
+                      0.7, 1),
+                    byrow = TRUE,
+                    ncol = 2)
+
+    generate_mvn_covariates(n = 10, mu = rep(0,ncol(Sigma)), Sigma = Sigma) %>%
+        generate_covariates(prob = c(0.01, 0.2)) %>%
+        generate_tri_treatment(alphas1 = c(-1.5, +0.3 , -0.5),
+                               alphas2 = c(-1.0, -0.3 , +0.5))
+
+    ## Expectations
+    expect_true(FALSE)
+})
