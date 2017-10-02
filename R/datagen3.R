@@ -128,12 +128,12 @@ generate_tri_treatment <- function(df, alphas1, alphas2) {
     denom <- 1 + exp_lpA1 + exp_lpA2
 
     ## True propensity scores
-    pA0 <- 1       / denom
-    pA1 <- exp_lpA1 / denom
-    pA2 <- exp_lpA2 / denom
+    df$pA0 <- 1        / denom
+    df$pA1 <- exp_lpA1 / denom
+    df$pA2 <- exp_lpA2 / denom
 
     ## n x 3 matrix of true propensity scores
-    pA_mat <- cbind(pA0, pA1, pA2)
+    pA_mat <- cbind(df$pA0, df$pA1, df$pA2)
 
     ## Generate treatment assignment indicator matrix
     A_mat <- pA_mat_to_A_mat(pA_mat)
