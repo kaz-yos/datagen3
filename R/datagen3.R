@@ -274,6 +274,9 @@ generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, be
 ##' @param ...
 ##'
 ##' @return invisibly return a matrix object
+##'
+##' @author Kazuki Yoshida
+##' @export
 print.datagen3 <- function(x, ...) {
 
     ## Construct
