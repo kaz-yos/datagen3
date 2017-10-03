@@ -58,7 +58,7 @@ test_that("Data generation steps work for three groups", {
     expect_true(all(data_tri_treat$A %in% c(0,1,2)))
 
     ## Add binary outcome via log-linear model
-    data_bin_outcome <- data_tri_treat %>%
+    data_bin_outcome_null_tx <- data_tri_treat %>%
         generate_bin_outcome_log_tri_treatment(beta0 = -1,
                                                ## No treatment effect at all
                                                betaA1 = 0,
@@ -66,7 +66,46 @@ test_that("Data generation steps work for three groups", {
                                                betaX = c(0.1, 0.2),
                                                betaXA1 = c(0, 0),
                                                betaXA2 = c(0, 0))
-    data_bin_outcome
-    expect_true(all(data_bin_outcome$Y %in% c(0,1)))
+    data_bin_outcome_null_tx
+    expect_true(all(data_bin_outcome_null_tx$Y %in% c(0,1)))
+    ## Under no treatment effect counterfactual are the same
+    expect_equal(data_bin_outcome_null_tx$pY0,
+                 data_bin_outcome_null_tx$pY1)
+    expect_equal(data_bin_outcome_null_tx$pY1,
+                 data_bin_outcome_null_tx$pY2)
+
+    ## Protective A = 1
+    data_bin_outcome_protect_A1 <- data_tri_treat %>%
+        generate_bin_outcome_log_tri_treatment(beta0 = -1,
+                                               ## No treatment effect at all
+                                               betaA1 = -1,
+                                               betaA2 = 0,
+                                               betaX = c(0.1, 0.2),
+                                               betaXA1 = c(0, 0),
+                                               betaXA2 = c(0, 0))
+    ## Counterfactual under treatment 1 is lower.
+    expect_equal(data_bin_outcome_protect_A1$pY0,
+                 data_bin_outcome_protect_A1$pY2)
+    expect_true(all(data_bin_outcome_protect_A1$pY1 < data_bin_outcome_protect_A1$pY0))
+    expect_true(all(data_bin_outcome_protect_A1$pY1 < data_bin_outcome_protect_A1$pY2))
+
+
+    ## Protective A = 1 in X2 = 1
+    data_bin_outcome_protect_A1_in_X2 <- data_tri_treat %>%
+        generate_bin_outcome_log_tri_treatment(beta0 = -1,
+                                               ## No treatment effect at all
+                                               betaA1 = 0,
+                                               betaA2 = 0,
+                                               betaX = c(0.1, 0.2),
+                                               betaXA1 = c(0, 0),
+                                               betaXA2 = c(0, -1))
+    ## Same in X2 = 0 stratum
+    expect_equal(filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY0,
+                 filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY1)
+    expect_equal(filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY0,
+                 filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY2)
+    ## Protective in X2 = 1 stratum
+    expect_true(all(filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pY1 < filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pY0))
+    expect_true(all(filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pY1 < filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pY2))
 
 })
