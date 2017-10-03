@@ -82,7 +82,7 @@ generate_bin_covariates <- function(df, prob) {
 ##' @export
 generate_bin_treatment <- function(df, alphas) {
 
-    assertthat::assert_that(ncol == (length(alphas) - 1))
+    assertthat::assert_that(ncol(df) == (length(alphas) - 1))
 
     ## X matrix
     Xs <- as.matrix(df)
