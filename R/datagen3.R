@@ -91,15 +91,15 @@ generate_bin_treatment <- function(df, alphas) {
     Xs <- cbind(rep(1, nrow(Xs)), Xs)
 
     ## Linear predictor
-    lp <- as.numeric(Xs %*% alphas)
+    lpA1 <- as.numeric(Xs %*% alphas)
 
     ## P[A=1|X] (true PS)
-    pA <- locfit::expit(lp)
+    df$pA1 <- locfit::expit(lpA1)
 
     ## Bernoulli(pA)
-    df$A <- rbinom(n = length(pA),
+    df$A <- rbinom(n = length(df$pA1),
                    size = 1,
-                   prob = pA)
+                   prob = df$pA1)
 
     df
 }
