@@ -14,6 +14,7 @@
 ##' @return a data_frame of Z_i MVN covariates
 ##'
 ##' @author Kazuki Yoshida
+##' @export
 generate_mvn_covariates <- function(n, mu, Sigma) {
 
     assertthat::assert_that(length(n) == 1)
@@ -44,6 +45,7 @@ generate_mvn_covariates <- function(n, mu, Sigma) {
 ##' @return a data_frame of X_i covariates
 ##'
 ##' @author Kazuki Yoshida
+##' @export
 generate_covariates <- function(df, prob) {
 
     assertthat::assert_that(ncol(df) == length(prob))
@@ -68,6 +70,7 @@ generate_covariates <- function(df, prob) {
 ##' @return df with treatment (A) added.
 ##'
 ##' @author Kazuki Yoshida
+##' @export
 generate_bin_treatment <- function(df, alphas) {
 
     assertthat::assert_that(ncol == (length(alphas) - 1))
@@ -104,6 +107,7 @@ generate_bin_treatment <- function(df, alphas) {
 ##' @return df with treatment (A) added.
 ##'
 ##' @author Kazuki Yoshida
+##' @export
 generate_tri_treatment <- function(df, alphas1, alphas2) {
 
     assertthat::assert_that(ncol(df) == (length(alphas1) - 1))
@@ -185,6 +189,7 @@ A_indicator_mat_to_multinom_A_vec <- function(A_mat) {
 ##' @return data_frame with binary Y added
 ##'
 ##' @author Kazuki Yoshida
+##' @export
 generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, betaX, betaXA1, betaXA2) {
 
     colnames_starting_with_X <- Filter(f = function(elt) {grepl("^X", elt)}, x = names(df))
@@ -294,6 +299,7 @@ print.datagen3 <- function(x, ...) {
 ##' @return data_frame with binary Y added
 ##'
 ##' @author Kazuki Yoshida
+##' @export
 generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, betaXA1) {
 
     colnames_starting_with_X <- Filter(f = function(elt) {grepl("^X", elt)}, x = names(df))
