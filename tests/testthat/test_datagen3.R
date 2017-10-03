@@ -42,7 +42,7 @@ test_that("Data generation steps work for three groups", {
 
     ## Generate binary covariates
     data_bin_cov <- generate_mvn_covariates(n = 1000, mu = rep(0,ncol(Sigma)), Sigma = Sigma) %>%
-        generate_covariates(prob = c(0.01, 0.2))
+        generate_bin_covariates(prob = c(0.01, 0.2))
 
     summary(data_bin_cov)
 
