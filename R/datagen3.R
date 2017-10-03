@@ -215,19 +215,19 @@ generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, be
     assertthat::assert_that(ncol(lpY) == 1)
 
     ## Counterfactual linear predictors
-    lpY0 <- beta0 +
+    lpYA0 <- beta0 +
         (betaA1 * 0) +
         (betaA2 * 0) +
         Xs %*% matrix(betaX) +
         Xs %*% matrix(betaXA1) * 0 +
         Xs %*% matrix(betaXA2) * 0
-    lpY1 <- beta0 +
+    lpYA1 <- beta0 +
         (betaA1 * 1) +
         (betaA2 * 0) +
         Xs %*% matrix(betaX) +
         Xs %*% matrix(betaXA1) * 1 +
         Xs %*% matrix(betaXA2) * 0
-    lpY2 <- beta0 +
+    lpYA2 <- beta0 +
         (betaA1 * 0) +
         (betaA2 * 1) +
         Xs %*% matrix(betaX) +
@@ -236,20 +236,20 @@ generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, be
 
     ## Tentative probability of binary outcome Y
     pY  <- exp(as.numeric(lpY))
-    pY0 <- exp(as.numeric(lpY0))
-    pY1 <- exp(as.numeric(lpY1))
-    pY2 <- exp(as.numeric(lpY2))
+    pYA0 <- exp(as.numeric(lpYA0))
+    pYA1 <- exp(as.numeric(lpYA1))
+    pYA2 <- exp(as.numeric(lpYA2))
 
     ## Truncate at 1 to avoid a probability beyond 1.
     pY[pY > 1] <- 1
-    pY0[pY0 > 1] <- 1
-    pY1[pY1 > 1] <- 1
-    pY2[pY2 > 1] <- 1
+    pYA0[pYA0 > 1] <- 1
+    pYA1[pYA1 > 1] <- 1
+    pYA2[pYA2 > 1] <- 1
 
     ## Add to data_frame
-    df$pY0 <- pY0
-    df$pY1 <- pY1
-    df$pY2 <- pY2
+    df$pYA0 <- pYA0
+    df$pYA1 <- pYA1
+    df$pYA2 <- pYA2
     df$pY <- pY
 
     ## Bernoulli(p_i) draw based on true risk of disease

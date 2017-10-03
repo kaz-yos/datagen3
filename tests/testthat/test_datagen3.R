@@ -69,10 +69,10 @@ test_that("Data generation steps work for three groups", {
     data_bin_outcome_null_tx
     expect_true(all(data_bin_outcome_null_tx$Y %in% c(0,1)))
     ## Under no treatment effect counterfactual are the same
-    expect_equal(data_bin_outcome_null_tx$pY0,
-                 data_bin_outcome_null_tx$pY1)
-    expect_equal(data_bin_outcome_null_tx$pY1,
-                 data_bin_outcome_null_tx$pY2)
+    expect_equal(data_bin_outcome_null_tx$pYA0,
+                 data_bin_outcome_null_tx$pYA1)
+    expect_equal(data_bin_outcome_null_tx$pYA1,
+                 data_bin_outcome_null_tx$pYA2)
 
     ## Protective A = 1
     data_bin_outcome_protect_A1 <- data_tri_treat %>%
@@ -85,10 +85,10 @@ test_that("Data generation steps work for three groups", {
                                                betaXA2 = c(0, 0))
     data_bin_outcome_protect_A1
     ## Counterfactual under treatment 1 is lower.
-    expect_equal(data_bin_outcome_protect_A1$pY0,
-                 data_bin_outcome_protect_A1$pY2)
-    expect_true(all(data_bin_outcome_protect_A1$pY1 < data_bin_outcome_protect_A1$pY0))
-    expect_true(all(data_bin_outcome_protect_A1$pY1 < data_bin_outcome_protect_A1$pY2))
+    expect_equal(data_bin_outcome_protect_A1$pYA0,
+                 data_bin_outcome_protect_A1$pYA2)
+    expect_true(all(data_bin_outcome_protect_A1$pYA1 < data_bin_outcome_protect_A1$pYA0))
+    expect_true(all(data_bin_outcome_protect_A1$pYA1 < data_bin_outcome_protect_A1$pYA2))
 
 
     ## Protective A = 1 in X2 = 1
@@ -102,12 +102,12 @@ test_that("Data generation steps work for three groups", {
                                                betaXA2 = c(0, -1))
     data_bin_outcome_protect_A1_in_X2
     ## Same in X2 = 0 stratum
-    expect_equal(filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY0,
-                 filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY1)
-    expect_equal(filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY0,
-                 filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY2)
+    expect_equal(filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pYA0,
+                 filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pYA1)
+    expect_equal(filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pYA0,
+                 filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pYA2)
     ## Protective in X2 = 1 stratum
-    expect_true(all(filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pY1 < filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pY0))
-    expect_true(all(filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pY1 < filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pY2))
+    expect_true(all(filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pYA1 < filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pYA0))
+    expect_true(all(filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pYA1 < filter(data_bin_outcome_protect_A1_in_X2, X2 == 1)$pYA2))
 
 })
