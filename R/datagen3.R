@@ -255,7 +255,32 @@ generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, be
     ## Bernoulli(p_i) draw based on true risk of disease
     df$Y <- rbinom(n = length(pY), size = 1, prob = pY)
 
+    ## Add class datagen3
+    class(df) <- c("datagen3", class(df))
+
     df
+}
+
+##' Print method for simulated data
+##'
+##' .. content for \details{} ..
+##'
+##' @param x data_frame with an additional class \code{datagen3}
+##' @param ...
+##'
+##' @return invisibly return a matrix object
+print.datagen3 <- function(x, ...) {
+
+    ## Construct
+    tab_overall <- print(tableone::CreateTableOne(data = x),
+                         printToggle = FALSE)
+    tab_strata  <- print(tableone::CreateTableOne(data = x, strata = "A", test = FALSE, smd = TRUE),
+                         smd = TRUE, printToggle = FALSE)
+    tab_combo <- cbind(tab_overall, tab_strata)
+
+    print(tab_combo, quote = FALSE)
+
+    invisible(tab_combo)
 }
 
 
