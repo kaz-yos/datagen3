@@ -324,7 +324,7 @@ generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, bet
     ## Extract X part as a matrix
     Xs <- as.matrix(df[,colnames_starting_with_X])
 
-    ## Construct treatment indicators from A in {0,1,2}
+    ## Construct treatment indicators from A in {0,1}
     A1 <- df$A
 
     ## Linear predictor matrix (n x 1)
@@ -336,14 +336,36 @@ generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, bet
     assertthat::assert_that(nrow(lpY) == nrow(df))
     assertthat::assert_that(ncol(lpY) == 1)
 
+    ## Counterfactual linear predictors
+    lpYA0 <- beta0 +
+        (betaA1 * 0) +
+        Xs %*% matrix(betaX) +
+        Xs %*% matrix(betaXA1) * 0
+    lpYA1 <- beta0 +
+        (betaA1 * 1) +
+        Xs %*% matrix(betaX) +
+        Xs %*% matrix(betaXA1) * 1
+
     ## Tentative probability of binary outcome Y
     pY <- exp(as.numeric(lpY))
+    pYA0 <- exp(as.numeric(lpYA0))
+    pYA1 <- exp(as.numeric(lpYA1))
 
     ## Truncate at 1 to avoid a probability beyond 1.
     pY[pY > 1] <- 1
+    pYA0[pYA0 > 1] <- 1
+    pYA1[pYA1 > 1] <- 1
+
+    ## Add to data_frame
+    df$pYA0 <- pYA0
+    df$pYA1 <- pYA1
+    df$pY <- pY
 
     ## Bernoulli(p_i)
     df$Y <- rbinom(n = length(pY), size = 1, prob = pY)
+
+    ## Add class datagen3
+    class(df) <- c("datagen3", class(df))
 
     df
 }
