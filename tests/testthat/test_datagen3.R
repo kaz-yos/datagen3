@@ -54,7 +54,7 @@ test_that("Data generation steps work for three groups", {
     data_tri_treat <- data_bin_cov %>%
         generate_tri_treatment(alphas1 = c(-1.5, +0.3 , -0.5),
                                alphas2 = c(-1.0, -0.3 , +0.5))
-
+    data_tri_treat
     expect_true(all(data_tri_treat$A %in% c(0,1,2)))
 
     ## Add binary outcome via log-linear model
@@ -66,9 +66,7 @@ test_that("Data generation steps work for three groups", {
                                                betaX = c(0.1, 0.2),
                                                betaXA1 = c(0, 0),
                                                betaXA2 = c(0, 0))
-
+    data_bin_outcome
     expect_true(all(data_bin_outcome$Y %in% c(0,1)))
 
-    ## Expectations
-    expect_true(FALSE)
 })
