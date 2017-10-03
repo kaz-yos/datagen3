@@ -83,6 +83,7 @@ test_that("Data generation steps work for three groups", {
                                                betaX = c(0.1, 0.2),
                                                betaXA1 = c(0, 0),
                                                betaXA2 = c(0, 0))
+    data_bin_outcome_protect_A1
     ## Counterfactual under treatment 1 is lower.
     expect_equal(data_bin_outcome_protect_A1$pY0,
                  data_bin_outcome_protect_A1$pY2)
@@ -99,6 +100,7 @@ test_that("Data generation steps work for three groups", {
                                                betaX = c(0.1, 0.2),
                                                betaXA1 = c(0, 0),
                                                betaXA2 = c(0, -1))
+    data_bin_outcome_protect_A1_in_X2
     ## Same in X2 = 0 stratum
     expect_equal(filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY0,
                  filter(data_bin_outcome_protect_A1_in_X2, X2 == 0)$pY1)
