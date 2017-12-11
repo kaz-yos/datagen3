@@ -8,6 +8,8 @@ Imports:
     MASS,
     tidyverse,
     assertthat,
+    foreach,
+    doRNG,
     locfit
 Suggests:
     testthat
