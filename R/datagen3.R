@@ -596,14 +596,14 @@ generate_scenario_data_frame <- function(lst_lst_possible_values) {
 ##' @export
 generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_count) {
     ## Sanity check
-    assert_that("scenarios" %in% class(scenario))
-    assert_that(nrow(scenario) == 1)
-    assert_that(is.numeric(R))
-    assert_that(length(R) == 1)
-    assert_that(is.numeric(scenario_count))
-    assert_that(length(scenario_count) == 1)
-    assert_that(is.numeric(part_count))
-    assert_that(length(part_count) == 1)
+    assertthat::assert_that("scenarios" %in% class(scenario))
+    assertthat::assert_that(nrow(scenario) == 1)
+    assertthat::assert_that(is.numeric(R))
+    assertthat::assert_that(length(R) == 1)
+    assertthat::assert_that(is.numeric(scenario_count))
+    assertthat::assert_that(length(scenario_count) == 1)
+    assertthat::assert_that(is.numeric(part_count))
+    assertthat::assert_that(length(part_count) == 1)
 
     ## Generate R iterations for a single scenario
     ## This is not parallelized. Parallelize the outer loop over scenarios.
@@ -646,11 +646,11 @@ generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_cou
 ##' @export
 generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R) {
     ## Sanity check
-    assert_that("scenarios" %in% class(scenarios))
-    assert_that(is.numeric(n_parts))
-    assert_that(length(n_parts) == 1)
-    assert_that(is.numeric(R))
-    assert_that(length(R) == 1)
+    assertthat::assert_that("scenarios" %in% class(scenarios))
+    assertthat::assert_that(is.numeric(n_parts))
+    assertthat::assert_that(length(n_parts) == 1)
+    assertthat::assert_that(is.numeric(R))
+    assertthat::assert_that(length(R) == 1)
 
     ## Message for information
     cat("### Generating data files.\n")
