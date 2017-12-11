@@ -450,14 +450,14 @@ generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, bet
 ##' .. content for \details{} ..
 ##' @
 ##' @param n Sample size
-##' @param alphas1 true coefficients for the first linear predictor. This vector should contain the intercept.
-##' @param alphas2 true coefficients for the second linear predictor. This vector should contain the intercept.
-##' @param beta0 Intercept coefficient
-##' @param betaA1 Coefficient for I(A_i = 1)
-##' @param betaA2 Coefficient for I(A_i = 2)
-##' @param betaX Coefficient vector for covariates X_i
-##' @param betaXA1 Interaction coefficients for covariates when A_i = 1
-##' @param betaXA2 Interaction coefficients for covariates when A_i = 2
+##' @param alphas1 True coefficients for the first treatment linear predictor. This vector should contain the intercept.
+##' @param alphas2 True coefficients for the second treatment linear predictor. This vector should contain the intercept.
+##' @param beta0 Outcome model intercept coefficient
+##' @param betaA1 Outcome model coefficient for I(A_i = 1)
+##' @param betaA2 Outcome model coefficient for I(A_i = 2)
+##' @param betaX Outcome model coefficient vector for covariates X_i
+##' @param betaXA1 Outcome model interaction coefficients for covariates when A_i = 1
+##' @param betaXA2 Outcome model interaction coefficients for covariates when A_i = 2
 ##'
 ##' @return a complete simulated data_frame with a datagen3 class attribute
 ##'
