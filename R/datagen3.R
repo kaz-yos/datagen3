@@ -2,7 +2,11 @@
 ### Data Generator for 3-Group CER Simulation
 ################################################################################
 
+###
+### Generate covariate
+################################################################################
 
+###  Franklin
 ##' Generate covariates as in Franklin et al 2014
 ##'
 ##' .. content for \details{} ..
@@ -51,6 +55,7 @@ generate_franklin_covariates <- function(n) {
                X10 = X10)
 }
 
+###  MVN latent variable approach
 
 ##' Generate MVN covariates Z_i
 ##'
@@ -82,7 +87,6 @@ generate_mvn_covariates <- function(n, mu, Sigma) {
 
     out
 }
-
 
 ##' Generate covariates X_i given Z_i and probabilities
 ##'
@@ -118,6 +122,11 @@ generate_bin_covariates <- function(df, prob) {
 }
 
 
+###
+### Generate treatment
+################################################################################
+
+###  Binary
 ##' Generate a binary treatment
 ##'
 ##' .. content for \details{} ..
@@ -154,6 +163,7 @@ generate_bin_treatment <- function(df, alphas) {
 }
 
 
+###  Three-valued treatment
 ##' Generate a three-valued treatment
 ##'
 ##' .. content for \details{} ..
@@ -232,6 +242,11 @@ A_indicator_mat_to_multinom_A_vec <- function(A_mat) {
 }
 
 
+###
+### Generate outcome
+################################################################################
+
+###  Binary outcome given three-valued treatment
 ##' Generate binary outcome given X_i and three-valued A_i
 ##'
 ##' .. content for \details{} ..
@@ -324,6 +339,8 @@ generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, be
     df
 }
 
+
+###  print method for datagen3 object
 ##' Print method for simulated data
 ##'
 ##' .. content for \details{} ..
@@ -349,7 +366,7 @@ print.datagen3 <- function(x, ...) {
     invisible(tab_combo)
 }
 
-
+###  Binary outcome given binary treatment
 ##' Generate binary outcome given X_i and binary A_i
 ##'
 ##' .. content for \details{} ..
@@ -420,4 +437,20 @@ generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, bet
     class(df) <- c("datagen3", class(df))
 
     df
+}
+
+
+###
+### Generate data one-step
+################################################################################
+
+###  Franklin method
+generate_franklin_data <- function(n,
+                                   alphas1, alphas2,
+                                   beta0, betaA1, betaA2, betaX, betaXA1, betaXA2) {
+    n %>%
+        generate_franklin_covariates(.) %>%
+        generate_tri_treatment(., alphas1, alphas2) %>%
+        generate_bin_outcome_log_tri_treatment(., beta0, betaA1, betaA2, betaX, betaXA1, betaXA2)
+
 }
