@@ -516,3 +516,41 @@ generate_data <- function(fun, lst_params) {
         do.call(fun, .)
 
 }
+
+
+###
+### Generate scenario set
+################################################################################
+
+##' Create a data_frame of list columns representing scenarios
+##'
+##' A row in the output data_frame represents a distinct scenario whereas each column represents a distinct argument to be given to the data generation function.
+##'
+##' @param lst_lst_possible_values
+##'
+##' @return data_frame with a \code{scenarios} class attribute holding one scenario in each row.
+##'
+##' @author Kazuki Yoshida
+##'
+##' @export
+generate_scenario_data_frame <- function(lst_lst_possible_values) {
+
+    ## All list elements must be named.
+    assertthat::assert_that(all(!is.null(names(lst_lst_possible_values))))
+    ## All list elements must be lists.
+    assertthat::assert_that(all(unlist(lapply(lst_lst_possible_values, class)) == "list"))
+    ## All sub-list elements must be non-lists.
+    assertthat::assert_that(all(!unlist(lapply(lst_lst_possible_values,
+                                               function(lst) {
+                                                   lapply(lst, is.list)
+                                               }))))
+
+    ## Expand scenarios to create all possible values.
+    df <- do.call(expand.grid, lst_lst_possible_values) %>%
+        as_data_frame
+
+    ## Add scenarios attribute.
+    class(df) <- c("scenarios", class(df))
+
+    df
+}
