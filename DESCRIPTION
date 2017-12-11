@@ -1,7 +1,7 @@
 Package: datagen3
 Title: Generate three-group simulation data
 Version: 0.1.0
-Authors@R: Kazuki Yoshida
+Authors: Kazuki Yoshida
 Description: What the package does (one paragraph).
 Depends: R (>= 3.4.1)
 Imports:
