@@ -448,16 +448,13 @@ generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, bet
 ##' Generate data by Franklin et al 2014
 ##'
 ##' .. content for details ..
-##' @
+##'
 ##' @param n Sample size
-##' @param alphas1 True coefficients for the first treatment linear predictor. This vector should contain the intercept.
-##' @param alphas2 True coefficients for the second treatment linear predictor. This vector should contain the intercept.
+##' @param alphas True coefficients for the first and second treatment linear predictors. This vector should contain the intercept. alphas = c(alpha01, alphaX1, alpha02, alphaX2)
 ##' @param beta0 Outcome model intercept coefficient
-##' @param betaA1 Outcome model coefficient for I(A_i = 1)
-##' @param betaA2 Outcome model coefficient for I(A_i = 2)
+##' @param betaA Outcome model coefficient for I(A_i = 1) and I(A_i = 2)
 ##' @param betaX Outcome model coefficient vector for covariates X_i
-##' @param betaXA1 Outcome model interaction coefficients for covariates when A_i = 1
-##' @param betaXA2 Outcome model interaction coefficients for covariates when A_i = 2
+##' @param betaXA1 Outcome model interaction coefficients for covariates. betaXA = c(betaXA1, betaXA2)
 ##'
 ##' @return a complete simulated data_frame with a datagen3 class attribute
 ##'
@@ -465,8 +462,30 @@ generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, bet
 ##'
 ##' @export
 generate_franklin_data <- function(n,
-                                   alphas1, alphas2,
-                                   beta0, betaA1, betaA2, betaX, betaXA1, betaXA2) {
+                                   alphas,
+                                   beta0,
+                                   betaA,
+                                   betaX,
+                                   betaXA) {
+
+    n_covariates <- length(betaX)
+    assertthat::assert_that(n_covariates == 10)
+    ## alphas = c(alphas1, alphas2) and includes two intercepts.
+    assertthat::assert_that(length(alphas) == 2 * (n_covariates + 1))
+    assertthat::assert_that(length(beta0) == 1)
+    ## betaA = c(betaA1, betaA2)
+    assertthat::assert_that(length(betaA) == 2)
+    ## betaXA = c(betaXA1, betaXA2)
+    assertthat::assert_that(length(betaXA) == 2 * n_covariates)
+
+    ## Deconstruct parameters
+    alphas1 <- alphas[seq_len(n_covariates + 1)]
+    alphas2 <- alphas[(n_covariates + 1) + seq_len(n_covariates + 1)]
+    betaA1 <- betaA[1]
+    betaA2 <- betaA[2]
+    betaXA1 <- betaXA[seq_len(n_covariates)]
+    betaXA2 <- betaXA[n_covariates + seq_len(n_covariates)]
+
     n %>%
         generate_franklin_covariates(.) %>%
         generate_tri_treatment(., alphas1, alphas2) %>%
