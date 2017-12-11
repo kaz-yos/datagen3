@@ -306,7 +306,10 @@ print.datagen3 <- function(x, ...) {
 ##' .. content for \details{} ..
 ##'
 ##' @param df data_frame containing X_i and A_i
-##' @param betas coefficients for the outcome model
+##' @param beta0 Intercept coefficient
+##' @param betaA1 Coefficient for A_i
+##' @param betaX Coefficient vector for covariates X_i
+##' @param betaXA1 Interaction coefficients for covariates when A_i = 1
 ##'
 ##' @return data_frame with binary Y added
 ##'
