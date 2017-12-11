@@ -644,7 +644,7 @@ generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_cou
 ##' @author Kazuki Yoshida
 ##'
 ##' @export
-generate_datafor_all_scenarios <- function(fun, scenarios, n_parts, R) {
+generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R) {
     ## Sanity check
     assert_that("scenarios" %in% class(scenarios))
     assert_that(is.numeric(n_parts))
