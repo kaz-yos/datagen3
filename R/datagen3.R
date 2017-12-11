@@ -3,6 +3,55 @@
 ################################################################################
 
 
+##' Generate covariates as in Franklin et al 2014
+##'
+##' .. content for \details{} ..
+##'
+##' @param n sample size to simulated
+##'
+##' @return data_frame with n rows with 10 columns (X1 through X10)
+##'
+##' @author Kazuki Yoshida
+##'
+##' @export
+generate_franklin_covariates <- function(n) {
+
+    ## Continuous
+    X1     <- rnorm(n = n, mean = 0, sd = 1)
+    X2     <- rlnorm(n = n, meanlog = 0, sdlog = 0.5)
+    X3     <- rnorm(n = n, mean = 0, sd = 10)
+
+    ## Binary
+    ##  Dependent on X1; mean(pX4) = 0.5
+    oddsX4 <- exp(2 * X1)
+    pX4    <- oddsX4 / (1 + oddsX4)
+    X4     <- rbinom(n = n, size = 1, prob = pX4)
+    ##  Independent
+    X5     <- rbinom(n = n, size = 1, prob = 0.2)
+
+    ## Multinomial
+    X6     <- as.numeric(c(1:5) %*% rmultinom(n = n, size = 1, prob = c(0.5,0.3,0.1,0.05,0.05)))
+
+    ## Induced variables
+    X7     <- sin(X1)
+    X8     <- X2^2
+    X9     <- X3 * X4
+    X10    <- X4 * X5
+
+    ## Output a data_frame
+    data_frame(X1 = X1,
+               X2 = X2,
+               X3 = X3,
+               X4 = X4,
+               X5 = X5,
+               X6 = X6,
+               X7 = X7,
+               X8 = X8,
+               X9 = X9,
+               X10 = X10)
+}
+
+
 ##' Generate MVN covariates Z_i
 ##'
 ##' .. content for \details{} ..
