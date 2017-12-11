@@ -445,9 +445,9 @@ generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, bet
 ################################################################################
 
 ###  Franklin method
-##' .. content for \description{} (no empty lines) ..
+##' Generate data by Franklin et al 2014
 ##'
-##' .. content for \details{} ..
+##' .. content for details ..
 ##' @
 ##' @param n Sample size
 ##' @param alphas1 True coefficients for the first treatment linear predictor. This vector should contain the intercept.
@@ -471,5 +471,25 @@ generate_franklin_data <- function(n,
         generate_franklin_covariates(.) %>%
         generate_tri_treatment(., alphas1, alphas2) %>%
         generate_bin_outcome_log_tri_treatment(., beta0, betaA1, betaA2, betaX, betaXA1, betaXA2)
+
+}
+
+
+###  Generic method that takes function as an argument
+##' Generate data based on a given specific function
+##'
+##' .. content for details ..
+##'
+##' @param fun Data generation function such as \code{\link{generate_franklin_data}}.
+##' @param lst_params one list of arguments that \code{fun} can take.
+##'
+##' @return a complete simulated data_frame with a datagen3 class attribute
+##'
+##' @author Kazuki Yoshida
+##'
+##' @export
+generate_data <- function(fun, lst_params) {
+
+    do.call(fun, lst_params)
 
 }
