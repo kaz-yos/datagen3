@@ -559,10 +559,10 @@ generate_scenario_data_frame <- function(lst_lst_possible_values) {
     ## All list elements must be lists.
     assertthat::assert_that(all(unlist(lapply(lst_lst_possible_values, class)) == "list"))
     ## All sub-list elements must be non-lists.
-    assertthat::assert_that(all(!unlist(lapply(lst_lst_possible_values,
-                                               function(lst) {
-                                                   lapply(lst, is.list)
-                                               }))))
+    assertthat::assert_that(all(unlist(lapply(lst_lst_possible_values,
+                                              function(lst) {
+                                                  all(!unlist(lapply(lst, is.list)))
+                                              }))))
 
     ## Expand scenarios to create all possible values.
     df <- do.call(expand.grid, lst_lst_possible_values) %>%
