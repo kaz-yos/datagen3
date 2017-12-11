@@ -661,8 +661,8 @@ generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R) {
     ## Generate all possible (scenario_count, part_count) tuples
     ## and put in a list
     tuples_senario_count_part <-
-        expand.grid(scenario_count = seq_along(scenarios),
-                    part_count     = seq_len(n_parts)) %>%
+        crossing(scenario_count = seq_len(nrow(scenarios)),
+                 part_count     = seq_len(n_parts)) %>%
         t %>%
         as.data.frame %>%
         as.list
