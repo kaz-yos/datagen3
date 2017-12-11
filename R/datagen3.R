@@ -596,8 +596,6 @@ generate_scenario_data_frame <- function(lst_lst_possible_values) {
 ##' @export
 generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_count) {
     ## Sanity check
-    assertthat::assert_that("scenarios" %in% class(scenario))
-    assertthat::assert_that(nrow(scenario) == 1)
     assertthat::assert_that(is.numeric(R))
     assertthat::assert_that(length(R) == 1)
     assertthat::assert_that(is.numeric(scenario_count))
