@@ -680,7 +680,11 @@ generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R) {
             "Part", part_count, "\n")
 
         ## Generate the part_count-th subfile for the scenario_count-th scenario.
-        try(generate_r_times_and_save(fun, scenario, R, scenario_count, part_count))
+        try(generate_r_times_and_save(fun,
+                                      scenario = scenarios[scenario_count,],
+                                      R,
+                                      scenario_count,
+                                      part_count))
 
         ## No return value
         NULL
