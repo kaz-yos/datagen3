@@ -490,6 +490,11 @@ generate_franklin_data <- function(n,
 ##' @export
 generate_data <- function(fun, lst_params) {
 
+    if ("data.frame" %in% class(lst_params)) {
+        ## If it is a data frame, it must be only one row
+        assertthat::assert_that(nrow(lst_params) == 1)
+    }
+
     ## Number of arguments fun takes
     n_fun_args <- length(formals(generate_franklin_data))
     ## Number of elements
@@ -500,9 +505,14 @@ generate_data <- function(fun, lst_params) {
     ## Their names must match up.
     names_fun_args <- names(formals(generate_franklin_data))
     names_params <- names(lst_params)
-    assertthat::assert_that(all(names_fun_args, names_params))
+    assertthat::assert_that(all(names_fun_args == names_params))
 
     ## With above confirmed, can just call
-    do.call(fun, lst_params)
+    ## tidyverse depends on magrittr.
+    lst_params %>%
+        ## Peel each list column cell to a vector.
+        lapply(., magrittr::extract2, 1) %>%
+        ## Use the list of vectors as arguments.
+        do.call(fun, .)
 
 }
