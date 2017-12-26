@@ -700,9 +700,17 @@ generate_scenario_data_frame <- function(lst_lst_possible_values) {
         as_data_frame
 
     ## Add scenario description generated from list element names in lst_lst_possible_values.
-    df$description <- lapply(df, names) %>%
+    scenario_description <- lapply(df, names) %>%
         Filter(f = function(elt) {!is.null(elt)}, x = .) %>%
         do.call(function(...) {paste(..., sep = ";")}, .)
+
+    if (length(scenario_description) == nrow(df)) {
+        ## Use if we have valid number of descriptions.
+        df$description <- scenario_description
+    } else {
+        ## Otherwise just empty strings
+        df$description <- rep("", nrow(df))
+    }
 
     ## Add scenarios attribute.
     class(df) <- c("scenarios", class(df))
