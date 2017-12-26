@@ -699,6 +699,11 @@ generate_scenario_data_frame <- function(lst_lst_possible_values) {
     df <- do.call(expand.grid, lst_lst_possible_values) %>%
         as_data_frame
 
+    ## Add scenario description generated from list element names in lst_lst_possible_values.
+    df$description <- lapply(df, names) %>%
+        Filter(f = function(elt) {!is.null(elt)}, x = .) %>%
+        do.call(function(...) {paste(..., sep = ";")}, .)
+
     ## Add scenarios attribute.
     class(df) <- c("scenarios", class(df))
 
