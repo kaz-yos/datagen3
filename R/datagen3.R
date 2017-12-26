@@ -646,14 +646,14 @@ generate_data <- function(fun, lst_params) {
     }
 
     ## Number of arguments fun takes
-    n_fun_args <- length(formals(generate_franklin_data))
+    n_fun_args <- length(formals(fun))
     ## Number of elements
     n_params <- length(lst_params)
     ## Must match
     assertthat::assert_that(n_fun_args == n_params)
 
     ## Their names must match up.
-    names_fun_args <- names(formals(generate_franklin_data))
+    names_fun_args <- names(formals(fun))
     names_params <- names(lst_params)
     assertthat::assert_that(all(names_fun_args == names_params))
 
