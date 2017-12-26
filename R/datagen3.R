@@ -118,7 +118,12 @@ generate_sturmer_unmeasured_covariates <- function(df, base_alphas1, base_alphas
 
     }
 
-    df
+    ## Return df without intermediate variables to prevent generate_tri_treatment
+    ## from failing due to more columns than alphas.
+    df %>%
+        select(-pA0_first,
+               -pA1_first,
+               -pA2_first)
 }
 
 
