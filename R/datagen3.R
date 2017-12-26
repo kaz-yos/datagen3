@@ -729,16 +729,17 @@ generate_scenario_data_frame <- function(lst_lst_possible_values) {
 ##'
 ##' @param fun specific data generator function
 ##' @param scenario A row of scenarios data_frame.
-##' @param R scalar value. Data are generated R times.
-##' @param scenario_count scalar value. Indicate the scenario count. Used for data file name.
-##' @param part_count scalar value. Indicates which subpart of
+##' @param R Scalar value. Data are generated R times.
+##' @param scenario_count Scalar value. Indicate the scenario count. Used for data file name.
+##' @param part_count Scalar value. Indicates which subpart of the scenario this part is.
+##' @param scenario_description A character value describing the current scenario.
 ##'
 ##' @return Use for its side effect. No return value. Save a data file in the working directory.
 ##'
 ##' @author Kazuki Yoshida
 ##'
 ##' @export
-generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_count) {
+generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_count, scenario_description) {
     ## Sanity check
     assertthat::assert_that(is.numeric(R))
     assertthat::assert_that(length(R) == 1)
@@ -746,6 +747,8 @@ generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_cou
     assertthat::assert_that(length(scenario_count) == 1)
     assertthat::assert_that(is.numeric(part_count))
     assertthat::assert_that(length(part_count) == 1)
+    assertthat::assert_that(is.character(scenario_description))
+    assertthat::assert_that(length(scenario_description) == 1)
 
     ## Generate R iterations for a single scenario
     ## This is not parallelized. Parallelize the outer loop over scenarios.
@@ -764,7 +767,8 @@ generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_cou
                         R)
 
     ## Save
-    save(scenario, R, scenario_count, part_count, lst_iter,
+    save(scenario, R, scenario_count, part_count, scenario_description,
+         lst_iter,
          file = filename)
 
     ## No return value
@@ -777,7 +781,7 @@ generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_cou
 ##' Given an iteration count and a list of scenario parameters for multiple scenarios (\code{Scenarios} object), generate R datasets for each scenario. If a scenario within a \code{Scenarios} object is corrupt (not correctly a \code{ScenarioDistResNet} object), it is skipped by \code{try}.
 ##'
 ##' @param fun specific data generator function
-##' @param scenarios a scenarios object. Each list row is a specification for a given scenario.
+##' @param scenarios a scenarios object. Each list row is a specification for a given scenario. A character column named description is expected.
 ##' @param parts how many subfiles to create for each scenario. Use this to ease parallelization across cluster nodes.
 ##' @param R iteration count for each subfile. The total iteration count for a given scenario is \code{parts * R}.
 ##'
@@ -822,11 +826,12 @@ generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R) {
             "Part", part_count, "\n")
 
         ## Generate the part_count-th subfile for the scenario_count-th scenario.
-        try(generate_r_times_and_save(fun,
-                                      scenario = scenarios[scenario_count,],
-                                      R,
-                                      scenario_count,
-                                      part_count))
+        try(generate_r_times_and_save(fun = fun,
+                                      scenario = scenarios[scenario_count,] %>% select(-description),
+                                      R = R,
+                                      scenario_count = scenario_count,
+                                      part_count = part_count,
+                                      scenario_description = as.character(scenarios[scenario_count,"description"])))
 
         ## No return value
         NULL
