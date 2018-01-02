@@ -384,17 +384,12 @@ generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, be
         Xs %*% matrix(betaXA1) * 0 +
         Xs %*% matrix(betaXA2) * 1
 
-    ## Tentative probability of binary outcome Y
-    pY  <- exp(as.numeric(lpY))
-    pYA0 <- exp(as.numeric(lpYA0))
-    pYA1 <- exp(as.numeric(lpYA1))
-    pYA2 <- exp(as.numeric(lpYA2))
-
+    ## Probability of binary outcome Y
     ## Truncate at 1 to avoid a probability beyond 1.
-    pY[pY > 1] <- 1
-    pYA0[pYA0 > 1] <- 1
-    pYA1[pYA1 > 1] <- 1
-    pYA2[pYA2 > 1] <- 1
+    pY   <- pmin(exp(as.numeric(lpY)), 1)
+    pYA0 <- pmin(exp(as.numeric(lpYA0)), 1)
+    pYA1 <- pmin(exp(as.numeric(lpYA1)), 1)
+    pYA2 <- pmin(exp(as.numeric(lpYA2)), 1)
 
     ## Add to data_frame
     df$pYA0 <- pYA0
