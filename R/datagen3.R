@@ -400,38 +400,9 @@ generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, be
     ## Bernoulli(p_i) draw based on true risk of disease
     df$Y <- rbinom(n = length(pY), size = 1, prob = pY)
 
-    ## Add class datagen3
-    class(df) <- c("datagen3", class(df))
-
     df
 }
 
-
-###  print method for datagen3 object
-##' Print method for simulated data
-##'
-##' .. content for details ..
-##'
-##' @param x data_frame with an additional class \code{datagen3}
-##' @param ...
-##'
-##' @return invisibly return a matrix object
-##'
-##' @author Kazuki Yoshida
-##' @export
-print.datagen3 <- function(x, ...) {
-
-    ## Construct
-    tab_overall <- print(tableone::CreateTableOne(data = x),
-                         printToggle = FALSE)
-    tab_strata  <- print(tableone::CreateTableOne(data = x, strata = "A", test = FALSE, smd = TRUE),
-                         smd = TRUE, printToggle = FALSE)
-    tab_combo <- cbind(tab_overall, tab_strata)
-
-    print(tab_combo, quote = FALSE)
-
-    invisible(tab_combo)
-}
 
 ###  Binary outcome given binary treatment
 ##' Generate binary outcome given X_i and binary A_i
@@ -500,9 +471,6 @@ generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, bet
     ## Bernoulli(p_i)
     df$Y <- rbinom(n = length(pY), size = 1, prob = pY)
 
-    ## Add class datagen3
-    class(df) <- c("datagen3", class(df))
-
     df
 }
 
@@ -523,7 +491,7 @@ generate_bin_outcome_log_bin_treatment <- function(df, beta0, betaX, betaA1, bet
 ##' @param betaX Outcome model coefficient vector for covariates X_i
 ##' @param betaXA1 Outcome model interaction coefficients for covariates. betaXA = c(betaXA1, betaXA2)
 ##'
-##' @return a complete simulated data_frame with a datagen3 class attribute
+##' @return a complete simulated data_frame
 ##'
 ##' @author Kazuki Yoshida
 ##'
@@ -575,7 +543,7 @@ generate_franklin_data <- function(n,
 ##' @param betaX Outcome model coefficient vector for covariates X_i
 ##' @param betaXA1 Outcome model interaction coefficients for covariates. betaXA = c(betaXA1, betaXA2)
 ##'
-##' @return a complete simulated data_frame with a datagen3 class attribute
+##' @return a complete simulated data_frame
 ##'
 ##' @author Kazuki Yoshida
 ##'
@@ -633,7 +601,7 @@ generate_sturmer_data <- function(n,
 ##' @param fun Data generation function such as \code{\link{generate_franklin_data}}.
 ##' @param lst_params one list of arguments that \code{fun} can take.
 ##'
-##' @return a complete simulated data_frame with a datagen3 class attribute
+##' @return a complete simulated data_frame
 ##'
 ##' @author Kazuki Yoshida
 ##'
@@ -659,12 +627,43 @@ generate_data <- function(fun, lst_params) {
 
     ## With above confirmed, can just call
     ## tidyverse depends on magrittr.
-    lst_params %>%
+    df <- lst_params %>%
         ## Peel each list column cell to a vector.
         lapply(., magrittr::extract2, 1) %>%
         ## Use the list of vectors as arguments.
         do.call(fun, .)
 
+    ## Add class datagen3
+    class(df) <- c("datagen3", class(df))
+
+    df
+}
+
+
+###  print method for datagen3 object
+##' Print method for simulated data
+##'
+##' .. content for details ..
+##'
+##' @param x data_frame with an additional class \code{datagen3}
+##' @param ...
+##'
+##' @return invisibly return a matrix object
+##'
+##' @author Kazuki Yoshida
+##' @export
+print.datagen3 <- function(x, ...) {
+
+    ## Construct
+    tab_overall <- print(tableone::CreateTableOne(data = x),
+                         printToggle = FALSE)
+    tab_strata  <- print(tableone::CreateTableOne(data = x, strata = "A", test = FALSE, smd = TRUE),
+                         smd = TRUE, printToggle = FALSE)
+    tab_combo <- cbind(tab_overall, tab_strata)
+
+    print(tab_combo, quote = FALSE)
+
+    invisible(tab_combo)
 }
 
 
