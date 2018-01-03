@@ -404,6 +404,91 @@ generate_bin_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, be
 }
 
 
+###  Poisson count outcome given three-valued treatment
+##' Generate count outcome given X_i and three-valued A_i
+##'
+##' .. content for details ..
+##'
+##' @param df data_frame containing X_i and A_i
+##' @param beta0 Intercept coefficient
+##' @param betaA1 Coefficient for I(A_i = 1)
+##' @param betaA2 Coefficient for I(A_i = 2)
+##' @param betaX Coefficient vector for covariates X_i
+##' @param betaXA1 Interaction coefficients for covariates when A_i = 1
+##' @param betaXA2 Interaction coefficients for covariates when A_i = 2
+##'
+##' @return data_frame with count Y added
+##'
+##' @author Kazuki Yoshida
+##' @export
+generate_count_outcome_log_tri_treatment <- function(df, beta0, betaA1, betaA2, betaX, betaXA1, betaXA2) {
+
+    colnames_starting_with_X <- Filter(f = function(elt) {grepl("^X", elt)}, x = names(df))
+
+    assertthat::assert_that(length(beta0) == 1)
+    assertthat::assert_that(length(betaX) == length(colnames_starting_with_X))
+    assertthat::assert_that(length(betaA1) == 1)
+    assertthat::assert_that(length(betaA2) == 1)
+    assertthat::assert_that(length(betaXA1) == length(betaX))
+    assertthat::assert_that(length(betaXA2) == length(betaX))
+
+    ## Extract X part as a matrix
+    Xs <- as.matrix(df[,colnames_starting_with_X])
+
+    ## Construct treatment indicators from A in {0,1,2}
+    A1 <- as.numeric(df$A == 1)
+    A2 <- as.numeric(df$A == 2)
+
+    ## Linear predictor matrix (n x 1)
+    lpY <- beta0 +
+        (betaA1 * A1) +
+        (betaA2 * A2) +
+        Xs %*% matrix(betaX) +
+        Xs %*% matrix(betaXA1) * A1 +
+        Xs %*% matrix(betaXA2) * A2
+
+    assertthat::assert_that(nrow(lpY) == nrow(df))
+    assertthat::assert_that(ncol(lpY) == 1)
+
+    ## Counterfactual linear predictors
+    lpYA0 <- beta0 +
+        (betaA1 * 0) +
+        (betaA2 * 0) +
+        Xs %*% matrix(betaX) +
+        Xs %*% matrix(betaXA1) * 0 +
+        Xs %*% matrix(betaXA2) * 0
+    lpYA1 <- beta0 +
+        (betaA1 * 1) +
+        (betaA2 * 0) +
+        Xs %*% matrix(betaX) +
+        Xs %*% matrix(betaXA1) * 1 +
+        Xs %*% matrix(betaXA2) * 0
+    lpYA2 <- beta0 +
+        (betaA1 * 0) +
+        (betaA2 * 1) +
+        Xs %*% matrix(betaX) +
+        Xs %*% matrix(betaXA1) * 0 +
+        Xs %*% matrix(betaXA2) * 1
+
+    ## Mean parameter for count outcome Y
+    pY   <- exp(as.numeric(lpY))
+    pYA0 <- exp(as.numeric(lpYA0))
+    pYA1 <- exp(as.numeric(lpYA1))
+    pYA2 <- exp(as.numeric(lpYA2))
+
+    ## Add to data_frame
+    df$pYA0 <- pYA0
+    df$pYA1 <- pYA1
+    df$pYA2 <- pYA2
+    df$pY   <- pY
+
+    ## Poisson(pY_i) draw based on true risk of disease
+    df$Y <- rpois(n = length(pY), lambda = pY)
+
+    df
+}
+
+
 ###  Binary outcome given binary treatment
 ##' Generate binary outcome given X_i and binary A_i
 ##'
