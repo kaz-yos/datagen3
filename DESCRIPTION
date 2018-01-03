@@ -7,6 +7,7 @@ Depends: R (>= 3.4.1)
 Imports:
     MASS,
     tidyverse,
+    pryr,
     assertthat,
     foreach,
     doRNG,

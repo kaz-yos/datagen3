@@ -679,6 +679,11 @@ generate_sturmer_data <- function(n,
 
 }
 
+## Define specialized versions
+generate_sturmer_data_bin   <- pryr::partial(generate_sturmer_data, outcome_fun = generate_bin_outcome_log_tri_treatment)
+generate_sturmer_data_count <- pryr::partial(generate_sturmer_data, outcome_fun = generate_count_outcome_log_tri_treatment)
+
+
 
 ###  Generic method that takes function as an argument
 ##' Generate data based on a given specific function
