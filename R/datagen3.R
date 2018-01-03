@@ -679,8 +679,45 @@ generate_sturmer_data <- function(n,
 
 }
 
-## Define specialized versions
+###   Define specialized versions
+##' Generate data by the extended version of Sturmer et al 2010 (binary outcome)
+##'
+##' .. content for details ..
+##'
+##' @param n Sample size
+##' @param alphas True coefficients for the first and second treatment linear predictors. This vector should contain the intercept. alphas = c(alpha01, alphaX1, alpha02, alphaX2)
+##' @param prev_params Prevalence parameters. A vector of length 3.
+##' @param contraindication Logical to determine whether to parametrize based on contraindication. If \code{TRUE}, the unmeasured binary variables are more common in the high PS regions (corners in the PS ternary plot). If \code{FALSE}, the unmeasured binary variables are more common in the low PS regions (edges in the PS ternary plot).
+##' @param beta0 Outcome model intercept coefficient
+##' @param betaA Outcome model coefficient for I(A_i = 1) and I(A_i = 2)
+##' @param betaX Outcome model coefficient vector for covariates X_i
+##' @param betaXA1 Outcome model interaction coefficients for covariates. betaXA = c(betaXA1, betaXA2)
+##'
+##' @return a complete simulated data_frame
+##'
+##' @author Kazuki Yoshida
+##'
+##' @export
 generate_sturmer_data_bin   <- pryr::partial(generate_sturmer_data, outcome_fun = generate_bin_outcome_log_tri_treatment)
+
+##' Generate data by the extended version of Sturmer et al 2010 (count outcome)
+##'
+##' .. content for details ..
+##'
+##' @param n Sample size
+##' @param alphas True coefficients for the first and second treatment linear predictors. This vector should contain the intercept. alphas = c(alpha01, alphaX1, alpha02, alphaX2)
+##' @param prev_params Prevalence parameters. A vector of length 3.
+##' @param contraindication Logical to determine whether to parametrize based on contraindication. If \code{TRUE}, the unmeasured binary variables are more common in the high PS regions (corners in the PS ternary plot). If \code{FALSE}, the unmeasured binary variables are more common in the low PS regions (edges in the PS ternary plot).
+##' @param beta0 Outcome model intercept coefficient
+##' @param betaA Outcome model coefficient for I(A_i = 1) and I(A_i = 2)
+##' @param betaX Outcome model coefficient vector for covariates X_i
+##' @param betaXA1 Outcome model interaction coefficients for covariates. betaXA = c(betaXA1, betaXA2)
+##'
+##' @return a complete simulated data_frame
+##'
+##' @author Kazuki Yoshida
+##'
+##' @export
 generate_sturmer_data_count <- pryr::partial(generate_sturmer_data, outcome_fun = generate_count_outcome_log_tri_treatment)
 
 
