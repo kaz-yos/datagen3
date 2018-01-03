@@ -698,7 +698,28 @@ generate_sturmer_data <- function(n,
 ##' @author Kazuki Yoshida
 ##'
 ##' @export
-generate_sturmer_data_bin   <- pryr::partial(generate_sturmer_data, outcome_fun = generate_bin_outcome_log_tri_treatment)
+generate_sturmer_data_bin <- function(n,
+                                      ## Treatment assignment
+                                      alphas,
+                                      prev_params,
+                                      contraindication,
+                                      ## Outcome assignment
+                                      beta0,
+                                      betaA,
+                                      betaX,
+                                      betaXA) {
+    generate_sturmer_data(n,
+                          ## Treatment assignment
+                          alphas,
+                          prev_params,
+                          contraindication,
+                          ## Outcome assignment
+                          beta0,
+                          betaA,
+                          betaX,
+                          betaXA,
+                          outcome_fun = generate_bin_outcome_log_tri_treatment)
+}
 
 ##' Generate data by the extended version of Sturmer et al 2010 (count outcome)
 ##'
@@ -718,8 +739,28 @@ generate_sturmer_data_bin   <- pryr::partial(generate_sturmer_data, outcome_fun 
 ##' @author Kazuki Yoshida
 ##'
 ##' @export
-generate_sturmer_data_count <- pryr::partial(generate_sturmer_data, outcome_fun = generate_count_outcome_log_tri_treatment)
-
+generate_sturmer_data_count <- function(n,
+                                        ## Treatment assignment
+                                        alphas,
+                                        prev_params,
+                                        contraindication,
+                                        ## Outcome assignment
+                                        beta0,
+                                        betaA,
+                                        betaX,
+                                        betaXA) {
+    generate_sturmer_data(n,
+                          ## Treatment assignment
+                          alphas,
+                          prev_params,
+                          contraindication,
+                          ## Outcome assignment
+                          beta0,
+                          betaA,
+                          betaX,
+                          betaXA,
+                          outcome_fun = generate_count_outcome_log_tri_treatment)
+}
 
 
 ###  Generic method that takes function as an argument
