@@ -627,6 +627,7 @@ generate_franklin_data <- function(n,
 ##' @param betaA Outcome model coefficient for I(A_i = 1) and I(A_i = 2)
 ##' @param betaX Outcome model coefficient vector for covariates X_i
 ##' @param betaXA1 Outcome model interaction coefficients for covariates. betaXA = c(betaXA1, betaXA2)
+##' @param outcome_fun Outcome generating function. Either one of \code{\link{generate_bin_outcome_log_tri_treatment}} or \code{\link{generate_count_outcome_log_tri_treatment}}
 ##'
 ##' @return a complete simulated data_frame
 ##'
@@ -642,7 +643,8 @@ generate_sturmer_data <- function(n,
                                   beta0,
                                   betaA,
                                   betaX,
-                                  betaXA) {
+                                  betaXA,
+                                  outcome_fun) {
 
     n_covariates <- length(betaX)
     assertthat::assert_that(n_covariates == 9)
@@ -673,7 +675,7 @@ generate_sturmer_data <- function(n,
         generate_sturmer_unmeasured_covariates(., alphas1[1:7], alphas2[1:7], prev_params, contraindication) %>%
         ## Treatment and outcome assignment is the same.
         generate_tri_treatment(., alphas1, alphas2) %>%
-        generate_bin_outcome_log_tri_treatment(., beta0, betaA1, betaA2, betaX, betaXA1, betaXA2)
+        outcome_fun(., beta0, betaA1, betaA2, betaX, betaXA1, betaXA2)
 
 }
 
