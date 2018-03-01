@@ -948,19 +948,21 @@ generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_cou
 ##' @param scenarios a scenarios object. Each list row is a specification for a given scenario. A character column named description is expected.
 ##' @param parts how many subfiles to create for each scenario. Use this to ease parallelization across cluster nodes.
 ##' @param R iteration count for each subfile. The total iteration count for a given scenario is \code{parts * R}.
+##' @param skip row numbers of the scenario object to skip data generation.
 ##'
 ##' @return Use for its side effect. There is no return value. Data files are created in the same folder.
 ##'
 ##' @author Kazuki Yoshida
 ##'
 ##' @export
-generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R) {
+generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R, skip) {
     ## Sanity check
     assertthat::assert_that("scenarios" %in% class(scenarios))
     assertthat::assert_that(is.numeric(n_parts))
     assertthat::assert_that(length(n_parts) == 1)
     assertthat::assert_that(is.numeric(R))
     assertthat::assert_that(length(R) == 1)
+    assertthat::assert_that(is.numeric(skip))
 
     ## Message for information
     cat("### Generating data files.\n")
@@ -986,16 +988,24 @@ generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R) {
         ## Assign values for readability
         scenario_count <- senario_count_part[1]
         part_count     <- senario_count_part[2]
-        cat("### Generating Scenario", scenario_count,
-            "Part", part_count, "\n")
 
-        ## Generate the part_count-th subfile for the scenario_count-th scenario.
-        try(generate_r_times_and_save(fun = fun,
-                                      scenario = scenarios[scenario_count,] %>% select(-description),
-                                      R = R,
-                                      scenario_count = scenario_count,
-                                      part_count = part_count,
-                                      scenario_description = as.character(scenarios[scenario_count,"description"])))
+
+        if (scenario_count %in% skip) {
+            cat("### Skipping Scenario", scenario_count,
+                "Part", part_count, "\n")
+
+        } else {
+            cat("### Generating Scenario", scenario_count,
+                "Part", part_count, "\n")
+
+            ## Generate the part_count-th subfile for the scenario_count-th scenario.
+            try(generate_r_times_and_save(fun = fun,
+                                          scenario = scenarios[scenario_count,] %>% select(-description),
+                                          R = R,
+                                          scenario_count = scenario_count,
+                                          part_count = part_count,
+                                          scenario_description = as.character(scenarios[scenario_count,"description"])))
+        }
 
         ## No return value
         NULL
