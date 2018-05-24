@@ -845,7 +845,7 @@ print.datagen3 <- function(x, ...) {
 ##'
 ##' A row in the output data_frame represents a distinct scenario whereas each column represents a distinct argument to be given to the data generation function.
 ##'
-##' @param lst_lst_possible_values
+##' @param lst_lst_possible_values named list of named lists of possible values.
 ##'
 ##' @return data_frame with a \code{scenarios} class attribute holding one scenario in each row.
 ##'
