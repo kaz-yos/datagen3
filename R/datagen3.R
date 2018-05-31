@@ -149,11 +149,14 @@ generate_mvn_covariates <- function(n, mu, Sigma) {
     assertthat::assert_that(ncol(Sigma) == length(mu))
     assertthat::assert_that(nrow(Sigma) == length(mu))
 
-    out <- tibble::as_data_frame(
-                       MASS::mvrnorm(n = n,
-                                     mu = mu,
-                                     Sigma = Sigma)
-                   )
+    mat <- MASS::mvrnorm(n = n,
+                         mu = mu,
+                         Sigma = Sigma)
+    ## MASS::mvrnorm gives a vector when n = 1.
+    if (n == 1) {
+        mat <- t(as.matrix(mat))
+    }
+    out <- tibble::as_data_frame(mat)
 
     names(out) <- gsub("V", "Z", names(out))
 
