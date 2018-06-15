@@ -900,13 +900,14 @@ generate_scenario_data_frame <- function(lst_lst_possible_values) {
 ##' @param scenario_count Scalar value. Indicate the scenario count. Used for data file name.
 ##' @param part_count Scalar value. Indicates which subpart of the scenario this part is.
 ##' @param scenario_description A character value describing the current scenario.
+##' @param path path to the directory where the file is generated. Include the trailing /.
 ##'
 ##' @return Use for its side effect. No return value. Save a data file in the working directory.
 ##'
 ##' @author Kazuki Yoshida
 ##'
 ##' @export
-generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_count, scenario_description) {
+generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_count, scenario_description, path) {
     ## Sanity check
     assertthat::assert_that(is.numeric(R))
     assertthat::assert_that(length(R) == 1)
@@ -928,7 +929,8 @@ generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_cou
     })
 
     ## Generate file name
-    filename <- sprintf("scenario_raw%03d_part%03d_r%d.RData",
+    filename <- sprintf("%sscenario_raw%03d_part%03d_r%d.RData",
+                        path,
                         scenario_count,
                         part_count,
                         R)
@@ -952,13 +954,14 @@ generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_cou
 ##' @param parts how many subfiles to create for each scenario. Use this to ease parallelization across cluster nodes.
 ##' @param R iteration count for each subfile. The total iteration count for a given scenario is \code{parts * R}.
 ##' @param skip row numbers of the scenario object to skip data generation.
+##' @param path path to the directory where files are generated. Include the trailing /.
 ##'
 ##' @return Use for its side effect. There is no return value. Data files are created in the same folder.
 ##'
 ##' @author Kazuki Yoshida
 ##'
 ##' @export
-generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R, skip) {
+generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R, skip, path) {
     ## Sanity check
     assertthat::assert_that("scenarios" %in% class(scenarios))
     assertthat::assert_that(is.numeric(n_parts))
@@ -1007,7 +1010,8 @@ generate_data_for_all_scenarios <- function(fun, scenarios, n_parts, R, skip) {
                                           R = R,
                                           scenario_count = scenario_count,
                                           part_count = part_count,
-                                          scenario_description = as.character(scenarios[scenario_count,"description"])))
+                                          scenario_description = as.character(scenarios[scenario_count,"description"]),
+                                          path = path))
         }
 
         ## No return value
