@@ -951,12 +951,12 @@ generate_r_times_and_save <- function(fun, scenario, R, scenario_count, part_cou
 ##'
 ##' @param fun specific data generator function
 ##' @param scenarios a scenarios object. Each list row is a specification for a given scenario. A character column named description is expected.
-##' @param parts how many subfiles to create for each scenario. Use this to ease parallelization across cluster nodes.
+##' @param n_parts how many subfiles to create for each scenario. Use this to ease parallelization across cluster nodes.
 ##' @param R iteration count for each subfile. The total iteration count for a given scenario is \code{parts * R}.
 ##' @param skip row numbers of the scenario object to skip data generation.
 ##' @param path path to the directory where files are generated. Include the trailing /.
 ##'
-##' @return Use for its side effect. There is no return value. Data files are created in the same folder.
+##' @return Use for its side effect. There is no return value. Data files are created under path.
 ##'
 ##' @author Kazuki Yoshida
 ##'
