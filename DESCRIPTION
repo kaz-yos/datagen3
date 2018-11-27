@@ -1,8 +1,9 @@
 Package: datagen3
-Title: Generate three-group simulation data
+Title: Generate Three-Group Simulation Data
 Version: 0.1.0
-Authors: Kazuki Yoshida
-Description: What the package does (one paragraph).
+Author: Kazuki Yoshida
+Maintainer: Kazuki Yoshida <kazukiyoshida@mail.harvard.edu>
+Description: Generate three treatment group simulated data for PS method assessment.
 Depends: R (>= 3.4.1)
 Imports:
     MASS,
@@ -14,7 +15,7 @@ Imports:
     locfit
 Suggests:
     testthat
-License: What license is it under?
+License: GPL2
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
